@@ -96,6 +96,8 @@ def get_options(command, wildcards):
         elif isinstance(value, dict):
             value = ",".join(value.values())
             options.append(f'--{option} {value}')
+        else:
+            options.append(f'--{option} {value}')
     return ' '.join(options)
 
 
@@ -129,28 +131,3 @@ def setup_config():
         RESULTS_DIR = os.path.join(RESULTS_DIR, '{run}')
 
     return BENCHMARKS_DIR, LOGS_DIR, RESULTS_DIR
-
-
-rule print_config:
-    '''
-    '''
-    output:
-        os.path.join(config['results_dir'], 'parameters.yaml')
-    benchmark:
-        os.path.join(config['benchmarks_dir'], 'print_config.tsv')
-    log:
-        os.path.join(config['logs_dir'], 'print_config.txt')
-    params:
-        run = lambda wildcards: get_run(wildcards)
-    run:
-        represent_dict_order = lambda self, data: self.represent_mapping('tag:yaml.org,2002:map', data.items())
-        yaml
-        cfg = OrderedDict()
-        for k in ['data', 'analyses', 'commands']:
-            cfg[k] = config['runs'][params.run][k]
-        dumper = yaml.dumper.SafeDumper
-        dumper.ignore_aliases = lambda *args : True
-        dumper.add_representer(OrderedDict, represent_dict_order)
-        with open(output[0], 'w') as output_file:
-            yaml.dump(cfg, output_file, indent=4,
-                      default_flow_style=False, Dumper=dumper)

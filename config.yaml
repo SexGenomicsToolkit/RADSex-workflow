@@ -18,8 +18,8 @@ params:
     process:
         min-depth: 1
 
-# multi_runs_file: 'data/runs.tsv'
-multi_runs_file:
+multi_runs_file: 'data/runs.tsv'
+# multi_runs_file:
 
 resources:
     process:

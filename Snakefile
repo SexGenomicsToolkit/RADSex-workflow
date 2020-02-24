@@ -4,6 +4,7 @@ include: 'rules/config.smk'
 
 BENCHMARKS_DIR, LOGS_DIR, RESULTS_DIR = setup_config()
 
+include: 'rules/utils.smk'
 include: 'rules/radsex.smk'
 
 ANALYSES = {'depth': rules.depth,
