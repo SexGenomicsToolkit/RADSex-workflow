@@ -1,0 +1,11 @@
+data:
+    samples: data/samples
+    popmap: data/popmap.tsv
+    genome: data/genome.fa
+
+process_min_depth: 1
+
+resources:
+    process:
+        threads: 10
+
