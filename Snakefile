@@ -25,7 +25,10 @@ def get_targets(wildcards):
                 if run != SINGLE_RUN_NAME:
                     output = output.format(run=run)
                 targets.append(output)
-        targets.append(rules.print_config.output[0])
+        output = rules.print_config.output[0]
+        if run != SINGLE_RUN_NAME:
+            output = output.format(run=run)
+        targets.append(output)
     return targets
 
 
