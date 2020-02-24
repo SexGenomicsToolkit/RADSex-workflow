@@ -3,9 +3,24 @@ data:
     popmap: data/popmap.tsv
     genome: data/genome.fa
 
-process_min_depth: 1
+analyses:
+    - distrib
+    - signif
+    - map
+    - depth
+    - freq
+
+params:
+    general:
+        min-depth: 5
+        groups:
+            group1: "males"
+            group2: "females"
+    process:
+        min-depth: 1
 
 resources:
     process:
         threads: 10
 
+default_settings_file: 'cfg/defaults.yaml'

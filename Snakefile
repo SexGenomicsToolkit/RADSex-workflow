@@ -1,17 +1,29 @@
 configfile: 'config.yaml'
 
-rule process:
+include: 'rules/utils.smk'
+include: 'rules/radsex.smk'
+
+ANALYSES = {'depth': rules.depth,
+            'distrib': rules.distrib,
+            'freq': rules.freq,
+            'map': rules.map,
+            'signif': rules.signif,
+            'subset': rules.subset}
+
+
+def get_analyses(wildcards):
+    '''
+    '''
+    targets = {}
+    for analysis in config['analyses']:
+        if analysis in ANALYSES:
+            targets[analysis] = ANALYSES[analysis].output
+    return targets
+
+
+rule all:
+    '''
+    '''
     input:
-        directory(config['data']['samples'])
-    output:
-        'results/markers_table.tsv'
-    benchmark:
-        'benchmarks/process.tsv'
-    log:
-        'logs/process.txt'
-    threads:
-        config['resources']['process']['threads']
-    params:
-        min_depth = params['process_min_depth']
-    shell:
-        'radsex process -T {threads} -i {input} -o {output} -d {params.process_min_depth} 2> {log}'
+        unpack(get_analyses)
+
