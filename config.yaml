@@ -6,7 +6,6 @@ data:
 analyses:
     - distrib
     - signif
-    - map
     - depth
     - freq
 
@@ -14,13 +13,20 @@ params:
     general:
         min-depth: 5
         groups:
-            group1: "males"
-            group2: "females"
+            group1: males
+            group2: females
     process:
         min-depth: 1
+
+# multi_runs_file: 'data/runs.tsv'
+multi_runs_file:
 
 resources:
     process:
         threads: 10
 
 default_settings_file: 'cfg/defaults.yaml'
+
+benchmarks_dir: benchmarks
+logs_dir: logs
+results_dir: results

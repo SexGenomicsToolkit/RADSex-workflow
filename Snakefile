@@ -1,6 +1,9 @@
 configfile: 'config.yaml'
 
-include: 'rules/utils.smk'
+include: 'rules/config.smk'
+
+BENCHMARKS_DIR, LOGS_DIR, RESULTS_DIR = setup_config()
+
 include: 'rules/radsex.smk'
 
 ANALYSES = {'depth': rules.depth,
@@ -11,13 +14,18 @@ ANALYSES = {'depth': rules.depth,
             'subset': rules.subset}
 
 
-def get_analyses(wildcards):
+def get_targets(wildcards):
     '''
     '''
-    targets = {}
-    for analysis in config['analyses']:
-        if analysis in ANALYSES:
-            targets[analysis] = ANALYSES[analysis].output
+    targets = []
+    for run in config['runs']:
+        for analysis in config['runs'][run]['analyses']:
+            if analysis in ANALYSES:
+                output = ANALYSES[analysis].output[0]
+                if run != SINGLE_RUN_NAME:
+                    output = output.format(run=run)
+                targets.append(output)
+        targets.append(rules.print_config.output[0])
     return targets
 
 
@@ -25,5 +33,5 @@ rule all:
     '''
     '''
     input:
-        unpack(get_analyses)
+        get_targets
 

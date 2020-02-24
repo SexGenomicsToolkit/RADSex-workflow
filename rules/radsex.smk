@@ -4,11 +4,11 @@ rule process:
     input:
         config['data']['samples']
     output:
-        'results/markers_table.tsv'
+        os.path.join(config['results_dir'], 'markers_table.tsv')
     benchmark:
-        'benchmarks/process.tsv'
+        os.path.join(config['benchmarks_dir'], 'process.tsv')
     log:
-        'logs/process.txt'
+        os.path.join(config['logs_dir'], 'process.txt')
     threads:
         config['resources']['process']['threads']
     params:
@@ -27,13 +27,13 @@ rule depth:
     '''
     input:
         markers_table = rules.process.output,
-        popmap = config['data']['popmap']
+        popmap = get_popmap
     output:
-        'results/depth.tsv'
+        os.path.join(RESULTS_DIR, 'depth.tsv')
     benchmark:
-        'benchmarks/depth.tsv'
+        os.path.join(BENCHMARKS_DIR, 'depth.tsv')
     log:
-        'logs/depth.txt'
+        os.path.join(LOGS_DIR, 'depth.txt')
     shell:
         'radsex depth '
         '--markers-table {input.markers_table} '
@@ -47,15 +47,15 @@ rule distrib:
     '''
     input:
         markers_table = rules.process.output,
-        popmap = config['data']['popmap']
+        popmap = get_popmap
     output:
-        'results/distrib.tsv'
+        os.path.join(RESULTS_DIR, 'distrib.tsv')
     benchmark:
-        'benchmarks/distrib.tsv'
+        os.path.join(BENCHMARKS_DIR, 'distrib.tsv')
     log:
-        'logs/distrib.txt'
+        os.path.join(LOGS_DIR, 'distrib.txt')
     params:
-        options = get_options('distrib')
+        options = lambda wildcards: get_options('distrib', wildcards)
     shell:
         'radsex distrib '
         '--markers-table {input.markers_table} '
@@ -71,13 +71,13 @@ rule freq:
     input:
         markers_table = rules.process.output
     output:
-        'results/freq.tsv'
+        os.path.join(RESULTS_DIR, 'freq.tsv')
     benchmark:
-        'benchmarks/freq.tsv'
+        os.path.join(BENCHMARKS_DIR, 'freq.tsv')
     log:
-        'logs/freq.txt'
+        os.path.join(LOGS_DIR, 'freq.txt')
     params:
-        options = get_options('freq')
+        options = lambda wildcards: get_options('freq', wildcards)
     shell:
         'radsex freq '
         '--markers-table {input.markers_table} '
@@ -91,16 +91,16 @@ rule map:
     '''
     input:
         markers_table = rules.process.output,
-        popmap = config['data']['popmap'],
-        genome = config['data']['genome']
+        popmap = get_popmap,
+        genome = get_genome
     output:
-        'results/map.tsv'
+        os.path.join(RESULTS_DIR, 'map.tsv')
     benchmark:
-        'benchmarks/map.tsv'
+        os.path.join(BENCHMARKS_DIR, 'map.tsv')
     log:
-        'logs/map.txt'
+        os.path.join(LOGS_DIR, 'map.txt')
     params:
-        options = get_options('map')
+        options = lambda wildcards: get_options('map', wildcards)
     shell:
         'radsex map '
         '--markers-file {input.markers_table} '
@@ -116,15 +116,15 @@ rule signif:
     '''
     input:
         markers_table = rules.process.output,
-        popmap = config['data']['popmap']
+        popmap = get_popmap
     output:
-        'results/signif.tsv'
+        os.path.join(RESULTS_DIR, 'signif.tsv')
     benchmark:
-        'benchmarks/signif.tsv'
+        os.path.join(BENCHMARKS_DIR, 'signif.tsv')
     log:
-        'logs/signif.txt'
+        os.path.join(LOGS_DIR, 'signif.txt')
     params:
-        options = get_options('signif')
+        options = lambda wildcards: get_options('signif', wildcards)
     shell:
         'radsex signif '
         '--markers-table {input.markers_table} '
@@ -139,15 +139,15 @@ rule subset:
     '''
     input:
         markers_table = rules.process.output,
-        popmap = config['data']['popmap']
+        popmap = get_popmap
     output:
-        'results/subset.tsv'
+        os.path.join(RESULTS_DIR, 'subset.tsv')
     benchmark:
-        'benchmarks/subset.tsv'
+        os.path.join(BENCHMARKS_DIR, 'subset.tsv')
     log:
-        'logs/subset.txt'
+        os.path.join(LOGS_DIR, 'subset.txt')
     params:
-        options = get_options('subset')
+        options = lambda wildcards: get_options('subset', wildcards)
     shell:
         'radsex subset '
         '--markers-table {input.markers_table} '
